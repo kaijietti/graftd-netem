@@ -1,0 +1,3 @@
+GRAFTD_IMAGE = 'raft-demo:latest'
+GRAFTD_NETWORK = 'mynet'
+GRAFTD_HTTP_PORT = '11000'
