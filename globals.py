@@ -8,6 +8,7 @@ def init():
     docker_client = docker.from_env()
     global iptables
     iptables = IPTables()
+    # start long lived graftd client
     global graftd_client
     try:
         graftd_client = docker_client.containers.get(GRAFTD_CLIENT_NAME)
