@@ -21,9 +21,12 @@ def start():
         hostname=VIZOR_IMAGE,
         ports={'8090/tcp': 8090}
     )
+    click.echo("successfully started vizor")
 
     # connect
     globals.docker_client.networks.get(GRAFTD_NETWORK).connect(vizor)
+    click.echo(f"successfully connected vizor to docker-network:{GRAFTD_NETWORK}")
+
 
     # start logstash-http
     globals.docker_client.containers.run(
@@ -35,6 +38,7 @@ def start():
         publish_all_ports=True,
         remove=True
     )
+    click.echo("successfully started logstash-http")
 
     # start log-pilot
     globals.docker_client.containers.run(
@@ -53,22 +57,26 @@ def start():
         publish_all_ports=True,
         remove=True
     )
+    click.echo("successfully started log-pilot")
 
 
 @click.command()
 def stop():
     try:
         globals.docker_client.containers.get(LOGPILOT_NAME).stop()
+        click.echo("successfully stopped log-pilot")
     except docker.errors.NotFound as e:
         click.echo(e)
 
     try:
         globals.docker_client.containers.get(LOGSTASH_IMAGE).stop()
+        click.echo("successfully stopped logstash-http")
     except docker.errors.NotFound as e:
         click.echo(e)
 
     try:
         globals.docker_client.containers.get(VIZOR_IMAGE).stop()
+        click.echo("successfully stopped vizor")
     except docker.errors.NotFound as e:
         click.echo(e)
 
