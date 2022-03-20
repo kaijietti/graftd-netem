@@ -25,17 +25,17 @@ def show():
     nodes = filter(lambda c: c.image.tags[0] == GRAFTD_IMAGE, globals.docker_client.containers.list())
     nodes = sorted(nodes, key=lambda c: c.name)
 
-    puts(colored.blue(columns(["NODE",               15],
+    puts(colored.blue(columns(["NODE",               10],
                               ["CONTAINER ID",       15],
-                              ["STATUS",              7],
+                              ["STATUS",             10],
                               ["IPAddress",          15],
                               ["Partition",          15])))
 
 
     for node in nodes:
-        puts(columns([node.name,                    15],
+        puts(columns([node.name,                    10],
                      [node.id[:12],                 15],
-                     [node.status,                   7],
+                     [node.status,                  10],
                      [get_node_ip(node),            15],
                      [m.get(get_node_ip(node), 'NULL'),15]))
 
