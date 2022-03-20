@@ -53,7 +53,7 @@ def unpause(id):
     n.unpause()
 
 @click.command()
-def print():
+def show():
     '''Print graftd nodes'''
 
     nodes = filter(lambda c: c.image.tags[0] == GRAFTD_IMAGE, globals.docker_client.containers.list())
@@ -74,4 +74,4 @@ node.add_command(start)
 node.add_command(stop)
 node.add_command(pause)
 node.add_command(unpause)
-node.add_command(print)
+node.add_command(show)

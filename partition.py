@@ -6,7 +6,7 @@ from config import DOCKER_USER_CHAIN, GRAFTD_IMAGE, GRAFTD_NETWORK, PARTITION_CH
 # define a group
 @click.group()
 def partition():
-    '''partition show/clear'''
+    '''partition show/clear/create'''
     pass
 
 def list_minus(x, y):
@@ -65,10 +65,10 @@ def create(partstr):
     # click.echo(ip_parts)
     # create chain and add rules
     for idx, ip_part in enumerate(ip_parts, start=1):
-        # create chain part#{idx+1}
+        # create chain part#{idx}
         chain_name = f'{PARTITION_CHAIN_PREFIX}{idx}'
         globals.iptables.create_chain(chain_name)
-        # all ips in this part jump to this
+        # all ips in this part jump to this chain
         for ip in ip_part:
             globals.iptables.insert_rule(
                 chain=DOCKER_USER_CHAIN,
