@@ -34,6 +34,11 @@ def delete(id, key):
     o = globals.graftd_client.exec_run(cmd)
     click.echo(o.output)
 
+@click.command()
+def stop():
+    globals.graftd_client.stop()
+
 client.add_command(get)
 client.add_command(set)
 client.add_command(delete)
+client.add_command(stop)
