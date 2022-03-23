@@ -1,5 +1,6 @@
 import click
 import globals
+import docker
 from clint.textui import puts, colored, columns
 from config import *
 
@@ -18,18 +19,36 @@ def start(id, join):
     join_cmd = ''
     if join != '':
         join_cmd = f'-join {join}:{GRAFTD_HTTP_PORT}'
-    globals.docker_client.containers.run(
-        GRAFTD_IMAGE,
-        command=f'/raftnode -id {id} {join_cmd} ~/{id}',
-        detach=True,
-        cap_add=['NET_ADMIN'],
-        name=id,
-        hostname=id,
-        network=GRAFTD_NETWORK,
-        labels={'aliyun.logs.catalina': 'stdout'},
-        publish_all_ports=True,
-        remove=True
-    )
+
+    try:
+        # restore node if exists
+        node = globals.docker_client.containers.get(id)
+        node.start()
+    except docker.errors.NotFound:
+        globals.docker_client.containers.run(
+            GRAFTD_IMAGE,
+            command=f'/raftnode -id {id} {join_cmd} ~/{id}',
+            detach=True,
+            cap_add=['NET_ADMIN'],
+            name=id,
+            hostname=id,
+            network=GRAFTD_NETWORK,
+            labels={'aliyun.logs.catalina': 'stdout'},
+            publish_all_ports=True,
+            #remove=True
+        )
+
+# control node
+@click.command()
+@click.option('--id', prompt='Node ID', help='ID of Node')
+def remove(id):
+    '''Remove graftd node'''
+    try:
+        # remove node if exists
+        node = globals.docker_client.containers.get(id)
+        node.remove(force=True)
+    except docker.errors.NotFound as e:
+        click.echo(e)
 
 @click.command()
 @click.option('--id', prompt='Node ID', help='ID of Node')
@@ -75,6 +94,7 @@ def show():
 # docker operation
 node.add_command(start)
 node.add_command(stop)
+node.add_command(remove)
 node.add_command(pause)
 node.add_command(unpause)
 node.add_command(show)
