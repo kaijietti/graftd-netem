@@ -7,6 +7,7 @@ from config import *
 @click.group()
 def client():
     '''client set/get/delete'''
+    globals.init_cli()
     pass
 
 @click.command()
@@ -36,7 +37,7 @@ def delete(id, key):
 
 @click.command()
 def stop():
-    globals.graftd_client.stop()
+    globals.graftd_client.remove(force=True)
     click.echo(f"successfully stopped {GRAFTD_CLIENT_NAME}")
 
 client.add_command(get)

@@ -59,9 +59,7 @@ def start():
     )
     click.echo("successfully started log-pilot")
 
-
-@click.command()
-def stop():
+def stop_log():
     try:
         globals.docker_client.containers.get(LOGPILOT_NAME).stop()
         click.echo("successfully stopped log-pilot")
@@ -79,6 +77,10 @@ def stop():
         click.echo("successfully stopped vizor")
     except docker.errors.NotFound as e:
         click.echo(e)
+
+@click.command()
+def stop():
+    return stop_log()
 
 
 log.add_command(start)

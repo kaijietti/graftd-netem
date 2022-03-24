@@ -91,6 +91,15 @@ def show():
                      [node.status,                  10],
                      [get_node_ip(node),            15]))
 
+def stop_nodes():
+    nodes = filter(lambda c: c.image.tags[0] == GRAFTD_IMAGE, globals.docker_client.containers.list())
+    for n in nodes:
+        try:
+            n.remove(force=True)
+            click.echo(f"successfully stopped {n.name}")
+        except docker.errors.APIError as e:
+            click.echo(e)
+
 # docker operation
 node.add_command(start)
 node.add_command(stop)

@@ -10,13 +10,16 @@ def init():
     global iptables
     iptables = IPTables()
 
+def init_net():
     # create graft-net if need
     try:
         docker_client.networks.get(GRAFTD_NETWORK)
     except docker.errors.NotFound:
         ipam_pool = docker.types.IPAMPool(
-            subnet='192.168.0.0/16',
-            gateway='192.168.0.1'
+            # subnet='192.168.0.0/16',
+            # gateway='192.168.0.1'
+            subnet=GRAFTD_NETWORK_IPAM_SUBNET,
+            gateway=GRAFTD_NETWORK_IPAM_GATEWAY
         )
 
         ipam_config = docker.types.IPAMConfig(
@@ -30,6 +33,7 @@ def init():
         )
         click.echo(f"successfully created docker-network:{GRAFTD_NETWORK}")
 
+def init_cli():
     # start long lived graftd client
     global graftd_client
     try:
@@ -42,5 +46,4 @@ def init():
             name=GRAFTD_CLIENT_NAME,
             hostname=GRAFTD_CLIENT_NAME,
             network=GRAFTD_NETWORK,
-            remove=True
         )
