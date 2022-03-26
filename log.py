@@ -67,7 +67,7 @@ def stop_log():
         click.echo(e)
 
     try:
-        globals.docker_client.containers.get(LOGSTASH_IMAGE).stop()
+        globals.docker_client.containers.get(LOGSTASH_IMAGE).remove(force=True)
         click.echo("successfully stopped logstash-http")
     except docker.errors.NotFound as e:
         click.echo(e)

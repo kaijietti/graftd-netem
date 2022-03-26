@@ -100,7 +100,7 @@ def show():
                      [get_node_ip(node),            15]))
 
 def stop_nodes():
-    nodes = filter(lambda c: c.image.tags[0] == GRAFTD_IMAGE, globals.docker_client.containers.list())
+    nodes = filter(lambda c: len(c.image.tags) != 0 and c.image.tags[0] == GRAFTD_IMAGE, globals.docker_client.containers.list())
     for n in nodes:
         try:
             n.remove(force=True)
