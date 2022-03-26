@@ -35,7 +35,14 @@ def start(id, join):
             network=GRAFTD_NETWORK,
             labels={'aliyun.logs.catalina': 'stdout'},
             publish_all_ports=True,
-            environment=["ELECTION_TIMEOUT=10000", "HEARTBEAT_TIMEOUT=10000", "COMMIT_TIMEOUT=50", "IGNORE_EMPTY_APPEND=1"]
+            environment=[
+                "ELECTION_TIMEOUT=10000",  #ms
+                "HEARTBEAT_TIMEOUT=10000", #ms
+                "COMMIT_TIMEOUT=50", #ms
+                "IGNORE_EMPTY_APPEND=1",
+                "SNAPSHOT_INTERVAL=20", #second
+                "SNAPSHOT_THRESHOLD=5" 
+            ]
             #remove=True
         )
 
